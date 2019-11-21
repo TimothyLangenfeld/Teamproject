@@ -191,9 +191,7 @@ public class Teamproject extends Application {
             	});
         
         
-        
-         d.addEventHandler;
-         
+                
          (new EventHandler<ActionEvent>() {
             		
             		public void handle(ActionEvent e) {
@@ -202,7 +200,7 @@ public class Teamproject extends Application {
             		
             	});
     	
-    	
+ 
         primaryStage.setScene(scene1);
         primaryStage.show();
     }
