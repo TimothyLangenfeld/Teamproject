@@ -1,6 +1,7 @@
 import javafx.stage.DirectoryChooser;
 
 import java.io.File;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -20,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -30,13 +32,18 @@ public class Teamproject extends Application {
 	
  	Image image;
    	GridPane grid;
-   	HBox UpperPane;
-   	VBox BaseLayout;
+   	HBox buttonBar;
+   	HBox imageinfoBar;
+   	VBox baseLayout;
    	
    	MenuBar menubar;
    
    	
    	ImageView imageV;
+   	
+   	ImageView[] listofImage; 
+   	
+   	String imageinfoText;
    	
    	File d;
    	File[] fulllist;
@@ -48,9 +55,10 @@ public class Teamproject extends Application {
    	
    	int spalte=0;
    	int zeile=0;
+   	int bildnummer=0;
    	
-   	int Bildanzahl=0;
-
+   	Image imageV = new Image("file:C:\\Users\\tabea\\Pictures\\Fotos\\Lightroom\\jan\\IMG_1416");
+   	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -61,7 +69,9 @@ public class Teamproject extends Application {
 			image = new Image("file:"+f.getPath());
 			
 			imageV = new ImageView();
-
+			listofImage[bildnummer]= imageV;
+			bildnummer++;
+					
 			imageV.setFitHeight(200);
 	        imageV.setPreserveRatio(true);
 			
@@ -107,24 +117,28 @@ public class Teamproject extends Application {
          BorderPane root = new BorderPane();
          root.setTop(menubar);
          
-         BaseLayout = new VBox(5); 
+         baseLayout = new VBox(5); 
      	
-     	UpperPane = new HBox(2);
+     	 buttonBar = new HBox(2);
+     	
+         imageinfoBar = new HBox(2);
      	
          grid = new GridPane();
          
-     	BaseLayout.getChildren().addAll(root,UpperPane,grid);
-     	
-     	
-     	Scene scene1 = new Scene(BaseLayout, 300, 300);
-     	
-     	
-     	//Bildraster
-     	//Gitter erstellen
-         grid.setPadding(new Insets(10, 10, 10, 10));
-         grid.setVgap(10);
-         grid.setHgap(10);
+       //Bildraster
+      	//Gitter erstellen
+          grid.setPadding(new Insets(10, 10, 10, 10));
+          grid.setVgap(10);
+          grid.setHgap(10);
+          
          
+     	 baseLayout.getChildren().addAll(root,buttonBar,grid,imageinfoBar);
+     	
+     	
+     	 Scene scene1 = new Scene(baseLayout, 300, 300);
+     	
+     	
+     	
          
        //FileChooser
      	FileChooser chooser = new FileChooser();
@@ -142,7 +156,7 @@ public class Teamproject extends Application {
      	
      	//Knopf zum Öffnen
      	openButton = new Button("Bild auswählen");
-		UpperPane.getChildren().add(openButton);
+		buttonBar.getChildren().add(openButton);
         
         openButton.setOnAction(
         	new EventHandler<ActionEvent>() {
@@ -162,9 +176,31 @@ public class Teamproject extends Application {
         });
         
         directoryButton = new Button ("Bilderordner auswählen");
-        UpperPane.getChildren().add(directoryButton);
+        buttonBar.getChildren().add(directoryButton);
         
         directoryButton.setOnAction(
+            	new EventHandler<ActionEvent>() {
+            		
+            		public void handle(ActionEvent e) {
+            		        		
+                	dChooser.setTitle("Wähle ein Bildordner aus");
+                	d = dChooser.showDialog(primaryStage);
+                	File[] dlist = d.listFiles();
+                	
+                	if(d != null) {
+                		
+                		for (int i=0; i<dlist.length;i++) {
+                    		addImagetoGrid(dlist[i]);
+
+                		}
+                	}
+            		
+            	}
+
+            });
+        
+        
+        openDirectory.setOnAction(
             	new EventHandler<ActionEvent>() {
             		
             		public void handle(ActionEvent e) {
@@ -195,11 +231,16 @@ public class Teamproject extends Application {
             		
             	});
         
-        grid.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->{
-            e.getX();
-            e.getY();
-           
-        });
+        
+        
+        imageV.setOnMouseClicked (new EventHandler<MouseEvent>() {
+       
+					@Override
+					public void handle(MouseEvent event) {
+						System.out.println("lol");
+					}
+            		
+            	});
          
          primaryStage.setScene(scene1);
          primaryStage.show();
