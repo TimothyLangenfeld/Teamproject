@@ -1,28 +1,44 @@
 import javafx.stage.DirectoryChooser;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+
+import java.util.logging.*;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 
@@ -32,50 +48,54 @@ public class Teamproject extends Application {
 	
  	Image image;
    	GridPane grid;
-   	HBox buttonBar;
-   	HBox imageinfoBar;
-   	VBox baseLayout;
+   	HBox UpperPane;
+   	VBox BaseLayout;
+   	VBox infoBar;
+
+   	HBox textBar;
    	
+   	Files selectedFiles;
+   	ImageView selectedImageView;
+   	
+	String contentType;
+
    	MenuBar menubar;
-   
    	
+   	ImageView lastImage;
+   	Image selectedImage;
    	ImageView imageV;
    	
-   	ImageView[] listofImage; 
-   	
-   	String imageinfoText;
+   	List<Image> photoList = new ArrayList<>();
+   	String photoString;
+   	Label photoPath;
+   	Label photoInfo;
    	
    	File d;
    	File[] fulllist;
    	
-   	ImageView [] imageArray = new ImageView[100];
-   	
-   	Button openButton;
-   	Button directoryButton;
-   	
    	int spalte=0;
    	int zeile=0;
-   	int bildnummer=0;
    	
-   	Image imageV = new Image("file:C:\\Users\\tabea\\Pictures\\Fotos\\Lightroom\\jan\\IMG_1416");
-   	
+    private static Logger logger = Logger.getLogger("Calc"); 
+
+
 	public static void main(String[] args) {
 		launch(args);
 	}
 	
 	private void addImagetoGrid(File f) {
 	
+		
 		//Image erstelln!!		
 			image = new Image("file:"+f.getPath());
 			
 			imageV = new ImageView();
-			listofImage[bildnummer]= imageV;
-			bildnummer++;
-					
+
 			imageV.setFitHeight(200);
-	        imageV.setPreserveRatio(true);
+			imageV.setPreserveRatio(true);
 			
 	        imageV.setImage(image);
+	        photoList.add(image);
 	        
 	        grid.add(imageV, spalte, zeile);
 	        spalte++;
@@ -86,16 +106,58 @@ public class Teamproject extends Application {
 	        	spalte=0;
 	        }
 	        
+	        imageV.setOnMouseClicked((MouseEvent e) -> {
 	        	
+	        	if(lastImage!=null) {
+	        		lastImage.setFitHeight(200);
+	        	}
+	      
+	        	selectedImageView = (ImageView) e.getTarget();
+	        	selectedImage = (selectedImageView).getImage();
+	        	photoString = selectedImage.impl_getUrl();
+	        	
+	        	File file  = new File(d.toString());
+	        	        			
+	        	System.out.println(selectedImage.impl_getUrl());
+	        	
+				try {
+					contentType = Files.probeContentType(file.toPath());
+				} 
+				
+				catch (Exception e1) {
+					logger.log(Level.SEVERE, "MIME NOT FOUND", e1);				
+				}
+				
+	            photoPath = new Label("Path: " + photoString);
+	            photoInfo = (new Label( "Size: " + selectedImage.getWidth() + " x " + selectedImage.getHeight() + " Size: " + " MimeTypes: " + contentType));
+	            infoBar.getChildren().clear();
+	            infoBar.getChildren().addAll(photoPath,photoInfo);	
+
+	            selectedImageView.setFitHeight(205);
+	            
+	            lastImage = (ImageView) e.getTarget();
+	     
+	           	            
+	        });
+
 	    }
-	
 	    
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
 		
+		
+		FileHandler handler = new FileHandler( "log.txt" ); 
+		
+		logger.info("WUPDI");
+
+		logger.addHandler(handler); 
+		
+		 
 		primaryStage.setTitle("Fotobuch");
+		
+		textBar = new HBox(3);
     	
     	//Menubar
     	
@@ -105,6 +167,44 @@ public class Teamproject extends Application {
          Menu fileMenu = new Menu("Datei");
          Menu editMenu = new Menu("Bearbeiten");
          Menu helpMenu = new Menu("Hilfe");
+         Menu loggerMenu = new Menu("Logger");
+         
+         RadioMenuItem severe = new RadioMenuItem("Severe");
+         RadioMenuItem info = new RadioMenuItem("Info");
+         RadioMenuItem fine = new RadioMenuItem("Fine");
+
+         ToggleGroup toggleGroup = new ToggleGroup();
+         toggleGroup.getToggles().add(severe);
+         toggleGroup.getToggles().add(info);
+         toggleGroup.getToggles().add(fine);
+
+         loggerMenu.getItems().add(severe);
+         loggerMenu.getItems().add(info);
+         loggerMenu.getItems().add(fine);
+
+         severe.setOnAction(new EventHandler<ActionEvent>() {
+        	    @Override public void handle(ActionEvent e) {
+               	 handler.setLevel( Level.SEVERE ); 
+
+        	    }
+        	   });
+         
+         info.setOnAction(new EventHandler<ActionEvent>() {
+     	    @Override public void handle(ActionEvent e) {
+            	 handler.setLevel( Level.INFO ); 
+
+     	    }
+     	   });
+         
+         fine.setOnAction(new EventHandler<ActionEvent>() {
+     	    @Override public void handle(ActionEvent e) {
+            	 handler.setLevel( Level.FINE ); 
+
+     	    }
+     	   });
+         
+         logger.info("Logger name: " + logger.getName()); 
+
          
          
          MenuItem openDirectory = new MenuItem("Verzeichnis öffnen");
@@ -112,34 +212,66 @@ public class Teamproject extends Application {
          
          fileMenu.getItems().addAll(openDirectory, exitProgramm);
          
-         menubar.getMenus().addAll(fileMenu, editMenu, helpMenu);
+         menubar.getMenus().addAll(fileMenu, editMenu, helpMenu, loggerMenu);
 
          BorderPane root = new BorderPane();
          root.setTop(menubar);
          
-         baseLayout = new VBox(5); 
+         BaseLayout = new VBox(5); 
      	
-     	 buttonBar = new HBox(2);
+     	UpperPane = new HBox(2);
      	
-         imageinfoBar = new HBox(2);
-     	
-         grid = new GridPane();
+        grid = new GridPane();
+        
+        grid.setPrefSize(300, 500);
+       
          
-       //Bildraster
-      	//Gitter erstellen
-          grid.setPadding(new Insets(10, 10, 10, 10));
-          grid.setVgap(10);
-          grid.setHgap(10);
-          
+        // Create a ScrollPane
+        ScrollPane scrollPane = new ScrollPane();
+ 
+      
+        scrollPane.setContent(grid);
+ 
+        // Always show vertical scroll bar
+        scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+        
+        // Horizontal scroll bar is only displayed when needed
+        scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+        
+         infoBar  = new VBox(1);
          
-     	 baseLayout.getChildren().addAll(root,buttonBar,grid,imageinfoBar);
+     	BaseLayout.getChildren().addAll(root,UpperPane,grid,infoBar, scrollPane, textBar);
      	
      	
-     	 Scene scene1 = new Scene(baseLayout, 300, 300);
+     	Scene scene1 = new Scene(BaseLayout, 300, 300);
      	
      	
-     	
+     	//Bildraster
+     	//Gitter erstellen
+         grid.setPadding(new Insets(10, 10, 10, 10));
+         grid.setVgap(10);
+         grid.setHgap(10);
          
+        UpperPane.setAlignment(Pos.CENTER);
+        
+        grid.setAlignment(Pos.CENTER);
+
+        photoPath = new Label();
+        infoBar.getChildren().add(photoPath);
+        
+        
+        //TEXT FIELD
+        TextField textField = new TextField("Schreib was rein...");
+        textField.setMaxWidth(400);
+        textField.setMinWidth(250);
+        
+        Label textLabel = new Label("  Beschriftung: ");
+        
+        Button textButton = new Button("Enter");
+
+        
+        textBar.getChildren().addAll(textLabel,textField,textButton);
+        
        //FileChooser
      	FileChooser chooser = new FileChooser();
      	
@@ -155,8 +287,9 @@ public class Teamproject extends Application {
              );
      	
      	//Knopf zum Öffnen
-     	openButton = new Button("Bild auswählen");
-		buttonBar.getChildren().add(openButton);
+        Button openButton = new Button("Bild auswählen");
+
+		UpperPane.getChildren().add(openButton);
         
         openButton.setOnAction(
         	new EventHandler<ActionEvent>() {
@@ -175,30 +308,10 @@ public class Teamproject extends Application {
 
         });
         
-        directoryButton = new Button ("Bilderordner auswählen");
-        buttonBar.getChildren().add(directoryButton);
-        
-        directoryButton.setOnAction(
-            	new EventHandler<ActionEvent>() {
-            		
-            		public void handle(ActionEvent e) {
-            		        		
-                	dChooser.setTitle("Wähle ein Bildordner aus");
-                	d = dChooser.showDialog(primaryStage);
-                	File[] dlist = d.listFiles();
-                	
-                	if(d != null) {
-                		
-                		for (int i=0; i<dlist.length;i++) {
-                    		addImagetoGrid(dlist[i]);
+        Button directoryButton = new Button ("Bilderordner auswählen");
 
-                		}
-                	}
-            		
-            	}
+        UpperPane.getChildren().add(directoryButton);
 
-            });
-        
         
         openDirectory.setOnAction(
             	new EventHandler<ActionEvent>() {
@@ -213,13 +326,43 @@ public class Teamproject extends Application {
                 		
                 		for (int i=0; i<dlist.length;i++) {
                     		addImagetoGrid(dlist[i]);
-
                 		}
                 	}
             		
             	}
 
             });
+        
+        directoryButton.setOnAction(
+            	new EventHandler<ActionEvent>() {
+            		
+            		public void handle(ActionEvent e) {
+            		        		
+                	dChooser.setTitle("Wähle ein Bildordner aus");
+                	d = dChooser.showDialog(primaryStage);
+                	File[] dlist = d.listFiles();
+                	
+                	if(d != null) {
+                		
+                		for (int i=0; i<dlist.length;i++) {
+                    		addImagetoGrid(dlist[i]);
+                		}
+                	}
+            		
+            	}
+
+            });
+        
+        textButton.setOnAction(
+            	new EventHandler<ActionEvent>() {
+            		
+            		public void handle(ActionEvent e) {
+            		        	
+            			
+                		}
+                	});
+        
+      
         
         exitProgramm.setOnAction(
             	new EventHandler<ActionEvent>() {
@@ -231,16 +374,6 @@ public class Teamproject extends Application {
             		
             	});
         
-        
-        
-        imageV.setOnMouseClicked (new EventHandler<MouseEvent>() {
-       
-					@Override
-					public void handle(MouseEvent event) {
-						System.out.println("lol");
-					}
-            		
-            	});
          
          primaryStage.setScene(scene1);
          primaryStage.show();
