@@ -58,6 +58,8 @@ public class Teamproject extends Application {
    	ImageView selectedImageView;
    	
 	String contentType;
+	
+	String bemerkung;
 
    	MenuBar menubar;
    	
@@ -108,6 +110,8 @@ public class Teamproject extends Application {
 	        
 	        imageV.setOnMouseClicked((MouseEvent e) -> {
 	        	
+	        	System.out.println(bemerkung);
+	        	
 	        	if(lastImage!=null) {
 	        		lastImage.setFitHeight(200);
 	        	}
@@ -121,15 +125,17 @@ public class Teamproject extends Application {
 	        	System.out.println(selectedImage.impl_getUrl());
 	        	
 				try {
-					contentType = Files.probeContentType(file.toPath());
+					int[] a = {1,2,3};
+					a[4] = 5;
 				} 
 				
 				catch (Exception e1) {
-					logger.log(Level.SEVERE, "MIME NOT FOUND", e1);				
+					logger.log(Level.ALL, "MIME NOT FOUND", e1);				
 				}
 				
 	            photoPath = new Label("Path: " + photoString);
-	            photoInfo = (new Label( "Size: " + selectedImage.getWidth() + " x " + selectedImage.getHeight() + " Size: " + " MimeTypes: " + contentType));
+	            photoInfo = (new Label( "Size: " + selectedImage.getWidth() + " x " + selectedImage.getHeight() + " Filesize: "+ f.length() +
+	            " MimeTypes: " + contentType + " Bemerkung: " + bemerkung ));
 	            infoBar.getChildren().clear();
 	            infoBar.getChildren().addAll(photoPath,photoInfo);	
 
@@ -308,6 +314,22 @@ public class Teamproject extends Application {
 
         });
         
+        textButton.setOnMouseClicked(
+            	new EventHandler<MouseEvent>() {
+            		
+            		public void handle(MouseEvent e) {
+            			
+            			bemerkung = textField.getText();
+            			
+            			System.out.println(bemerkung);
+            			
+            			
+            			
+            		}
+
+                });
+            		        		
+        
         Button directoryButton = new Button ("Bilderordner auswählen");
 
         UpperPane.getChildren().add(directoryButton);
@@ -380,5 +402,4 @@ public class Teamproject extends Application {
      }
 
  }
-
 
