@@ -346,9 +346,6 @@ public class Teamproject extends Application {
             			
             			 currentImages.get(gridPosition).setbemerkung(bemerkung);
             			 
-            			 photoInfo = (new Label( "Size: " + width + " x " + height + " Filesize: "+ size +
-            			            " MimeTypes: " + contentType + " Bemerkung: " + bemerkung ));
-            			
             			
             			
             		}
