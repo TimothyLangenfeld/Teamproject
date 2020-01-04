@@ -60,15 +60,9 @@ public class Teamproject extends Application {
    	
 	String contentType;
 	
-	
-	
-	
-	
    	MenuBar menubar;
    	
    	ImageView lastImage;
-   	Image selectedImage;
-   	ImageView imageV;
    	
    	List<LoadedImage> currentImages = new ArrayList<>();
    	String photoString;
@@ -155,6 +149,7 @@ public class Teamproject extends Application {
 	            photoNameLabel = new Label("Name: "+ name );
 	            photoInfo = (new Label( "Size: " + width + " x " + height + "  Filesize: "+ Math.round(size/ 1024) + " kb" +
 	            "  MimeTypes: " + contentType + "  Bemerkung: " + bemerkung ));
+	           
 	            infoBar.getChildren().clear();
 	            infoBar.getChildren().addAll(photoNameLabel,photoInfo);	
 
@@ -236,8 +231,11 @@ public class Teamproject extends Application {
          
          MenuItem openDirectory = new MenuItem("Verzeichnis öffnen");
          MenuItem exitProgramm = new MenuItem("Beenden");
+         MenuItem deletePicture = new MenuItem("Löschen");
          
          fileMenu.getItems().addAll(openDirectory, exitProgramm);
+         editMenu.getItems().add(deletePicture);
+         
          
          menubar.getMenus().addAll(fileMenu, editMenu, helpMenu, loggerMenu);
 
@@ -344,14 +342,36 @@ public class Teamproject extends Application {
             			
             			System.out.println(bemerkung);
             			
-            			 currentImages.get(gridPosition).setbemerkung(bemerkung);
-            			 
-            			
+            			 photoNameLabel = new Label("Name: "+ name );
+         	            photoInfo = (new Label( "Size: " + width + " x " + height + "  Filesize: "+ Math.round(size/ 1024) + " kb" +
+         	            "  MimeTypes: " + contentType + "  Bemerkung: " + bemerkung ));
+         	           
+         	            infoBar.getChildren().clear();
+         	            infoBar.getChildren().addAll(photoNameLabel,photoInfo);	
             			
             		}
 
                 });
-            		        		
+        
+        deletePicture.setOnAction(
+            	new EventHandler<ActionEvent>() {
+            		
+            		public void handle(ActionEvent e) {
+            			
+            			for (int i=0; i<=currentImages.size(); i++) {
+            		
+                			grid.getChildren().remove(currentImages.get(i).imageV);
+             	            infoBar.getChildren().clear();
+             	            zeile=0;
+             	            spalte=0;
+
+
+            				 } 
+            			}
+            		    
+            	});
+        
+        
         
         Button directoryButton = new Button ("Bilderordner auswählen");
 
