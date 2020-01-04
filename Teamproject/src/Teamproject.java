@@ -153,8 +153,8 @@ public class Teamproject extends Application {
 				}
 				
 	            photoNameLabel = new Label("Name: "+ name );
-	            photoInfo = (new Label( "Size: " + width + " x " + height + " Filesize: "+ size +
-	            " MimeTypes: " + contentType + " Bemerkung: " + bemerkung ));
+	            photoInfo = (new Label( "Size: " + width + " x " + height + "  Filesize: "+ Math.round(size/ 1024) + " kb" +
+	            "  MimeTypes: " + contentType + "  Bemerkung: " + bemerkung ));
 	            infoBar.getChildren().clear();
 	            infoBar.getChildren().addAll(photoNameLabel,photoInfo);	
 
