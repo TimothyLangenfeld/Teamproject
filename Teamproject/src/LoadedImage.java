@@ -15,7 +15,9 @@ public class LoadedImage{
 	Image image;
 	ImageView imageV;
 	String title;
-	String bemerkung=null;
+	String bemerkung="";
+	double width;
+	double height;
 	int imageCount;
 	int zeile;
 	int spalte;
@@ -39,13 +41,17 @@ public class LoadedImage{
 		this.imageV  = new ImageView(this.image);
 		this.zeile = zeile;
 		this.spalte = spalte;
+		this.width = this.image.getWidth();
+		this.height = this.image.getHeight();
+		
 		
 	}
 	
-	LoadedImage(String bemerkung){
+	public void setbemerkung(String bemerkung){
 		this.bemerkung = bemerkung;
 	}
 	
+
 
 
 }
