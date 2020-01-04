@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
@@ -60,9 +61,7 @@ public class Teamproject extends Application {
 	String contentType;
 	
 	
-	String name;
-	String bemerkung;
-
+	
 	
 	
    	MenuBar menubar;
@@ -78,15 +77,23 @@ public class Teamproject extends Application {
    	
    	File d;
    	File[] fulllist;
-   	
-   	
-   	Object selectedObject;
-   	
+   	   	
    	int spalte=0;
    	int zeile=0;
    	int imageCount = -1;
-   	int zahl = 0;
    	
+   	//Image Anzeige
+   	
+   	int gridPosition = 0;   	
+   	String name;
+	String bemerkung;
+	double size;
+	double width;
+	double height;
+	
+   	LoadedImage selectedObject;
+	
+   	//Logger
     private static Logger logger = Logger.getLogger("Calc"); 
 
 
@@ -120,27 +127,24 @@ public class Teamproject extends Application {
 	        	        
 	        (currentImages.get(imageCount).imageV).setOnMouseClicked((MouseEvent e) -> {
 	        	
-	        	
+	        	Integer integer = (grid.getColumnIndex((Node) e.getTarget()));
+	        	gridPosition = ((grid.getRowIndex((Node) e.getTarget()))*3)+integer;
+	        		        	
 	        	if(lastImage!=null) {
 	        		lastImage.setFitHeight(200);
 	        	}
 	        	
-	        	selectedImageView = (ImageView) e.getTarget();
-	        
-	        	System.out.println(e.getPickResult());
 	        	
-	        	name = currentImages.get(imageCount).name;
+	        	selectedObject = currentImages.get(gridPosition);
+	        	name = currentImages.get(gridPosition).name;
+	        	size = currentImages.get(gridPosition).fileSize;
+	        	width = currentImages.get(gridPosition).width;
+	        	height = currentImages.get(gridPosition).height;
+	        	bemerkung = currentImages.get(gridPosition).bemerkung;
 	        	
-	        	selectedImage = selectedImageView.getImage();
-	        	photoString = selectedImage.impl_getUrl();
-	       
-	        	
-	        	File file  = new File(d.toString());
-	        	        			
-	        	System.out.println(selectedImage.impl_getUrl());
-	        	
+	        		        	        				        	
 				try {
-					contentType = Files.probeContentType(file.toPath());
+					contentType = Files.probeContentType(currentImages.get(gridPosition).file.toPath());
 
 				} 
 				
@@ -149,12 +153,12 @@ public class Teamproject extends Application {
 				}
 				
 	            photoNameLabel = new Label("Name: "+ name );
-	            photoInfo = (new Label( "Size: " + selectedImage.getWidth() + " x " + selectedImage.getHeight() + " Filesize: "+ f.length() +
+	            photoInfo = (new Label( "Size: " + width + " x " + height + " Filesize: "+ size +
 	            " MimeTypes: " + contentType + " Bemerkung: " + bemerkung ));
 	            infoBar.getChildren().clear();
 	            infoBar.getChildren().addAll(photoNameLabel,photoInfo);	
 
-	            selectedImageView.setFitHeight(205);
+	            currentImages.get(gridPosition).imageV.setFitHeight(205);
 	            
 	            lastImage = (ImageView) e.getTarget();
 	     
@@ -340,6 +344,11 @@ public class Teamproject extends Application {
             			
             			System.out.println(bemerkung);
             			
+            			 currentImages.get(gridPosition).setbemerkung(bemerkung);
+            			 
+            			 photoInfo = (new Label( "Size: " + width + " x " + height + " Filesize: "+ size +
+            			            " MimeTypes: " + contentType + " Bemerkung: " + bemerkung ));
+            			
             			
             			
             		}
@@ -396,6 +405,8 @@ public class Teamproject extends Application {
             	new EventHandler<ActionEvent>() {
             		
             		public void handle(ActionEvent e) {
+            			
+            			currentImages.get(gridPosition).setbemerkung(textField.getText());
             		        	
             			
                 		}
