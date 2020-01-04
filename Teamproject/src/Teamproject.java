@@ -59,24 +59,33 @@ public class Teamproject extends Application {
    	
 	String contentType;
 	
+	
+	String name;
 	String bemerkung;
 
+	
+	
    	MenuBar menubar;
    	
    	ImageView lastImage;
    	Image selectedImage;
    	ImageView imageV;
    	
-   	List<Image> photoList = new ArrayList<>();
+   	List<LoadedImage> currentImages = new ArrayList<>();
    	String photoString;
-   	Label photoPath;
+   	Label photoNameLabel;
    	Label photoInfo;
    	
    	File d;
    	File[] fulllist;
    	
+   	
+   	Object selectedObject;
+   	
    	int spalte=0;
    	int zeile=0;
+   	int imageCount = -1;
+   	int zahl = 0;
    	
     private static Logger logger = Logger.getLogger("Calc"); 
 
@@ -86,20 +95,20 @@ public class Teamproject extends Application {
 	}
 	
 	private void addImagetoGrid(File f) {
-	
-		
-		//Image erstelln!!		
-			image = new Image("file:"+f.getPath());
-			
-			imageV = new ImageView();
 
-			imageV.setFitHeight(200);
-			imageV.setPreserveRatio(true);
-			
-	        imageV.setImage(image);
-	        photoList.add(image);
+			imageCount++;
+
+	        LoadedImage q = new LoadedImage(f,  imageCount,  spalte,  zeile);
 	        
-	        grid.add(imageV, spalte, zeile);
+	        q.imageV.setFitHeight(200);
+			q.imageV.setPreserveRatio(true);
+			
+	        q.imageV.setImage(q.image);
+	        
+	        currentImages.add(q);
+	        
+	        grid.add(q.imageV, spalte, zeile);
+	        
 	        spalte++;
 
 	        if(spalte>2){
@@ -108,36 +117,42 @@ public class Teamproject extends Application {
 	        	spalte=0;
 	        }
 	        
-	        imageV.setOnMouseClicked((MouseEvent e) -> {
+	        	        
+	        (currentImages.get(imageCount).imageV).setOnMouseClicked((MouseEvent e) -> {
 	        	
-	        	System.out.println(bemerkung);
 	        	
 	        	if(lastImage!=null) {
 	        		lastImage.setFitHeight(200);
 	        	}
-	      
+	        	
 	        	selectedImageView = (ImageView) e.getTarget();
-	        	selectedImage = (selectedImageView).getImage();
+	        
+	        	System.out.println(e.getPickResult());
+	        	
+	        	name = currentImages.get(imageCount).name;
+	        	
+	        	selectedImage = selectedImageView.getImage();
 	        	photoString = selectedImage.impl_getUrl();
+	       
 	        	
 	        	File file  = new File(d.toString());
 	        	        			
 	        	System.out.println(selectedImage.impl_getUrl());
 	        	
 				try {
-					int[] a = {1,2,3};
-					a[4] = 5;
+					contentType = Files.probeContentType(file.toPath());
+
 				} 
 				
 				catch (Exception e1) {
-					logger.log(Level.ALL, "MIME NOT FOUND", e1);				
+					logger.log(Level.SEVERE, "MIME NOT FOUND", e1);				
 				}
 				
-	            photoPath = new Label("Path: " + photoString);
+	            photoNameLabel = new Label("Name: "+ name );
 	            photoInfo = (new Label( "Size: " + selectedImage.getWidth() + " x " + selectedImage.getHeight() + " Filesize: "+ f.length() +
 	            " MimeTypes: " + contentType + " Bemerkung: " + bemerkung ));
 	            infoBar.getChildren().clear();
-	            infoBar.getChildren().addAll(photoPath,photoInfo);	
+	            infoBar.getChildren().addAll(photoNameLabel,photoInfo);	
 
 	            selectedImageView.setFitHeight(205);
 	            
@@ -145,6 +160,8 @@ public class Teamproject extends Application {
 	     
 	           	            
 	        });
+	        
+
 
 	    }
 	    
@@ -262,8 +279,8 @@ public class Teamproject extends Application {
         
         grid.setAlignment(Pos.CENTER);
 
-        photoPath = new Label();
-        infoBar.getChildren().add(photoPath);
+        photoNameLabel = new Label();
+        infoBar.getChildren().add(photoNameLabel);
         
         
         //TEXT FIELD
