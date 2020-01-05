@@ -13,7 +13,7 @@ public class LoadedImage{
 	File file;
 	double fileSize;
 	Image image;
-	ImageView imageV;
+	protected ImageView imageV;
 	String title;
 	String bemerkung="";
 	double width;
@@ -61,6 +61,23 @@ public class LoadedImage{
 		this.bemerkung = bemerkung;
 	}
 	
+	
+	public ImageView getImageView(){
+		return imageV;
+	}
+	
+	public Image getImage(){
+		return image;
+	}
+	
+	public int getSpalte(){
+		return spalte;
+	}
+	
+	public int getZeile(){
+		return zeile;
+	}
+
 
 
 

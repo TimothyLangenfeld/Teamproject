@@ -98,7 +98,9 @@ public class Teamproject extends Application {
   	
     private static Logger logger = Logger.getLogger("Calc"); 
 
-
+    
+    /** main-Klasse*/
+    
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -109,14 +111,13 @@ public class Teamproject extends Application {
 
 	        LoadedImage q = new LoadedImage(f,  imageCount,  spalte,  zeile);
 	        
-	        q.imageV.setFitHeight(200);
-			q.imageV.setPreserveRatio(true);
+	        q.getImageView().setFitHeight(200);
+			q.getImageView().setPreserveRatio(true);
 			
-	        q.imageV.setImage(q.image);
 	        
 	        currentImages.add(q);
 	        
-	        grid.add(q.imageV, spalte, zeile);
+	        grid.add(q.getImageView(), q.getSpalte(), q.getZeile());
 	        
 	        spalte++;
 
@@ -137,7 +138,6 @@ public class Teamproject extends Application {
 	        	}
 	        	
 	        	
-	        	selectedObject = currentImages.get(gridPosition);
 	        	name = currentImages.get(gridPosition).name;
 	        	size = currentImages.get(gridPosition).fileSize;
 	        	width = currentImages.get(gridPosition).width;
