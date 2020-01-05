@@ -112,7 +112,7 @@ public class Teamproject extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
-		/** logger-Configurations **/
+		/** logger-Configurations */
 
 		logger.info("Logger name is " + logger.getName());
 		logger.info("WUPDI, the programm started alright!");
