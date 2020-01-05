@@ -8,19 +8,19 @@ import javafx.scene.input.MouseEvent;
 
 public class LoadedImage{
 	
-	String name;
-	String path;
-	File file;
-	double fileSize;
-	Image image;
-	protected ImageView imageV;
-	String title;
-	String bemerkung="";
-	double width;
-	double height;
-	int imageCount;
-	int zeile;
-	int spalte;
+	private String name;
+	private String path;
+	private File file;
+	private double fileSize;
+	private Image image;
+	private  ImageView imageV;
+	private String title;
+	private String bemerkung="";
+	private double width;
+	private double height;
+	private int imageCount;
+	private int zeile;
+	private int spalte;
 	
 	
 	Image[] gitterimages;
@@ -52,6 +52,8 @@ public class LoadedImage{
 		this.width = this.image.getWidth();
 		this.height = this.image.getHeight();
 		
+		this.imageVSettigs();
+		
 		
 	}
 	
@@ -61,9 +63,25 @@ public class LoadedImage{
 		this.bemerkung = bemerkung;
 	}
 	
+	public String getBemerkung(){
+		return bemerkung;
+	}
+	
 	
 	public ImageView getImageView(){
 		return imageV;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public double getfileSize(){
+		return fileSize;
+	}
+	
+	public File getFile(){
+		return file;
 	}
 	
 	public Image getImage(){
@@ -77,6 +95,26 @@ public class LoadedImage{
 	public int getZeile(){
 		return zeile;
 	}
+	
+	public double getwidth(){
+		return width;
+	}
+	
+	public double getheight(){
+		return height;
+	}
+	
+	public void imageVSettigs(){
+		
+		this.imageV.setFitHeight(200);
+		this.imageV.setPreserveRatio(true);
+	}
+
+	
+	public void makebigger() {
+		this.imageV.setFitHeight(205);
+	}
+	
 
 
 
