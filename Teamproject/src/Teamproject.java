@@ -7,6 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
+import com.drew.metadata.exif.ExifSubIFDDirectory;
 
 import java.util.logging.*;
 
@@ -328,7 +333,7 @@ public class Teamproject extends Application {
 				helpBase.setStyle("-fx-background-color: #D2FDCC");
 
 				Text helpLabel = new Text("Wir helfen!");
-				Text helpText = new Text("Frag uns: Timonthy und Tabea");
+				Text helpText = new Text("Frag uns: Timothy und Tabea");
 
 				helpLabel.setStyle("-fx-font-size: 30px ");
 
@@ -549,6 +554,20 @@ public class Teamproject extends Application {
 
 			/** save clicked Image */
 			lastImage = (ImageView) e.getTarget();
+			
+			 File fileMeta  = new File(name);
+		        try {
+					Metadata metadata = ImageMetadataReader.readMetadata(fileMeta);
+					 for (Directory directory : metadata.getDirectories()) {
+						 //Metadata ausgeben
+				            for (Tag tag : directory.getTags()) {
+				                System.out.println(tag + "Metadata");
+				            }
+				        }
+				} catch (Exception e1) {
+					
+					System.out.println("File not found");
+				}
 
 		});
 
