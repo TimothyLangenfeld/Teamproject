@@ -477,7 +477,7 @@ public class Teamproject extends Application {
 	private void addImagetoGrid(File f) {
 		
 		/** create ImageObjekt, add to Arraylist and Gridpane
-		 *  set Node to center
+		 *  set Node to center f
 		 */
 
 		imageCount++;
