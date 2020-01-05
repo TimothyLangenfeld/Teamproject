@@ -6,6 +6,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+/** class implements an image with information that can be displayed
+ * 
+ * @author tabea
+ * @version 1.0
+ *
+ */
+
 public class LoadedImage{
 	
 	private String name;
@@ -57,10 +64,12 @@ public class LoadedImage{
 		
 	}
 	
-	/** Setter-Methode um Bemerkung zu ändern */
+	/** Setter-Method to change comment
+	 * @param comment
+	 * */
 	
-	public void setbemerkung(String bemerkung){
-		this.bemerkung = bemerkung;
+	public void setbemerkung(String comment){
+		this.bemerkung = comment;
 	}
 	
 	public String getBemerkung(){
@@ -110,6 +119,7 @@ public class LoadedImage{
 		this.imageV.setPreserveRatio(true);
 	}
 
+	/** makes the determined ImageView bigger*/
 	
 	public void makebigger() {
 		this.imageV.setFitHeight(205);

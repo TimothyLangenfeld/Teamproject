@@ -473,12 +473,13 @@ public class Teamproject extends Application {
 		primaryStage.setScene(scene1);
 		primaryStage.show();
 	}
+	
+	/** methode creates ImageObject, adds to Arraylist and Gridpane
+	 *  set Node to center 
+	 *  @param file
+	 */
 
 	private void addImagetoGrid(File f) {
-		
-		/** create ImageObjekt, add to Arraylist and Gridpane
-		 *  set Node to center f
-		 */
 
 		imageCount++;
 
