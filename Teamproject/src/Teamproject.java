@@ -36,58 +36,66 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
-
+/**@author tabea
+ * @version 1.0 */
 
 
 public class Teamproject extends Application {
 	
- 	Image image;
+	/** Layoutbestandteile */
+	
    	GridPane grid;
+   	
    	HBox UpperPane;
    	VBox BaseLayout;
    	VBox infoBar;
 
    	HBox textBar;
    	
-   	Files selectedFiles;
-   	ImageView selectedImageView;
-   	
-	String contentType;
-	
    	MenuBar menubar;
    	
-   	ImageView lastImage;
-   	
-   	List<LoadedImage> currentImages = new ArrayList<>();
-   	String photoString;
    	Label photoNameLabel;
    	Label photoInfo;
    	
-   	File d;
+   	
+   	/** Arraylist der Bildobjekte*/
+   	
+   	List<LoadedImage> currentImages = new ArrayList<>();
+
+   	/**add to grid Hilfsvariablen*/
+   	
+	File d;
    	File[] fulllist;
-   	   	
-   	int spalte=0;
-   	int zeile=0;
-   	int imageCount = -1;
    	
-   	//Image Anzeige
    	
-   	int gridPosition = 0;   	
-   	String name;
+   	/** Image Anzeige Informationen*/
+
+	String name;
 	String bemerkung;
+	String contentType;  	   	
+
 	double size;
 	double width;
 	double height;
-	
-   	LoadedImage selectedObject;
-	
-   	//Logger
+   	
+   	int spalte=0;
+   	int zeile=0;
+   	int imageCount = -1; 	
+   	int gridPosition = 0;   	
+   	
+   	/** Letztes Ausgewähltes Bild */
+   	
+  	ImageView lastImage;
+  	
+   	/**Logger*/
+  	
     private static Logger logger = Logger.getLogger("Calc"); 
 
 
@@ -232,9 +240,13 @@ public class Teamproject extends Application {
          MenuItem openDirectory = new MenuItem("Verzeichnis öffnen");
          MenuItem exitProgramm = new MenuItem("Beenden");
          MenuItem deletePicture = new MenuItem("Löschen");
+         MenuItem helpItem = new MenuItem("Hilfe");
+
          
          fileMenu.getItems().addAll(openDirectory, exitProgramm);
          editMenu.getItems().add(deletePicture);
+         helpMenu.getItems().add(helpItem);
+
          
          
          menubar.getMenus().addAll(fileMenu, editMenu, helpMenu, loggerMenu);
@@ -358,7 +370,7 @@ public class Teamproject extends Application {
             		
             		public void handle(ActionEvent e) {
             			
-            			for (int i=0; i<=currentImages.size(); i++) {
+            			for (int i=0; i<currentImages.size(); i++) {
             		
                 			grid.getChildren().remove(currentImages.get(i).imageV);
              	            infoBar.getChildren().clear();
@@ -371,6 +383,43 @@ public class Teamproject extends Application {
             		    
             	});
         
+        helpItem.setOnAction(
+            	new EventHandler<ActionEvent>() {
+
+            		public void handle(ActionEvent e) {   
+            			
+            			BorderPane helpBase = new BorderPane();
+            			helpBase.setStyle("-fx-background-color: #FFE29E");
+            			
+            			Label helpLabel = new Label("Wir helfen immer!");
+            			
+            			helpLabel.setStyle("-fx-font-size: 22px");
+      
+            			 HBox helpLayout = new HBox(2);
+            			 helpLayout.getChildren().add(helpLabel);
+            			 
+            			 helpBase.setCenter(helpLabel);
+            			 helpBase.getChildren().add(helpLayout);
+            			 
+                         Scene helpScene = new Scene(helpBase, 400, 400);
+          
+                         // New window (Stage)
+                         Stage helpWindow = new Stage();
+                         helpWindow.setTitle("Hilfe");
+                         helpWindow.setScene(helpScene);
+                          
+                         // Set position of second window, related to primary window.
+                         helpWindow.setX(primaryStage.getX() + 200);
+                         helpWindow.setY(primaryStage.getY() + 100);
+                         
+                         helpWindow.setWidth(400);
+                         helpWindow.setHeight(400);
+
+
+                         helpWindow.show();
+            		
+            		}
+            	});
         
         
         Button directoryButton = new Button ("Bilderordner auswählen");
@@ -440,6 +489,7 @@ public class Teamproject extends Application {
                 	}
             		
             	});
+        
         
          
          primaryStage.setScene(scene1);

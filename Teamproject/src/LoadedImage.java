@@ -31,6 +31,14 @@ public class LoadedImage{
 		System.out.println("lol");
 	}
 	
+	/** Konstruktor zum erstellen von Projekt Attributen
+	 * 
+	 * @param f
+	 * @param imageCount
+	 * @param spalte
+	 * @param zeile
+	 */
+	
 	LoadedImage(File f, int imageCount, int spalte, int zeile){
 		this.name = f.getName();
 		this.path = f.getPath();
@@ -46,6 +54,8 @@ public class LoadedImage{
 		
 		
 	}
+	
+	/** Setter-Methode um Bemerkung zu ändern */
 	
 	public void setbemerkung(String bemerkung){
 		this.bemerkung = bemerkung;
