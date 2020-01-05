@@ -113,11 +113,14 @@ public class LoadedImage{
 	
 	public void makebigger() {
 		this.imageV.setFitHeight(205);
+		this.imageV.setStyle(" -fx-fill: transparent;\r\n" + 
+				"    -fx-stroke: green;\r\n" + 
+				"    -fx-stroke-width: 5;\r\n" + 
+				"    -fx-stroke-dash-array: 12 2 4 2;\r\n" + 
+				"    -fx-stroke-dash-offset: 6;\r\n" + 
+				"    -fx-stroke-line-cap: butt;");
 	}
 	
-
-
-
 
 }
 
